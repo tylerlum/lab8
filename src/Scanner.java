@@ -131,7 +131,7 @@ public class Scanner {
                 // The token is an integer -- return a token with the
                 // integer in its "value" field.
                 case StreamTokenizer.TT_NUMBER: {
-                    return new Token( (int)(input.nval) );
+                    return new Token( (double)(input.nval) );
                 }
 
                 // The token is neither a word nor an integer -- return a

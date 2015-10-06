@@ -1,6 +1,4 @@
-import java.math.BigDecimal;
-
-/** A Token holds either a String name or an Integer value. It is used by
+/** A Token holds either a String name or a Double value. It is used by
  * the Scanner while reading the input.
  *
  * @see Scanner
@@ -12,7 +10,7 @@ public class Token {
     private String name;
 
     /** The value of an integer token. */
-    private BigDecimal value;
+    private Double value;
 
     /** Whether this Token is an integer or a variable.
      * Invariant: 
@@ -23,34 +21,30 @@ public class Token {
      *      non-null value
      * </ul>
      */
-    private boolean isInteger;
-
-
+    private boolean isDouble;
 
     /** Constructs a Token with a string value.
      *
      * @param s the string value of the new token
      */
     public Token( String s ) {
-        isInteger = false;
+        isDouble = false;
         name = s;
     }
 
 
 
-    /** Constructs a Token with an integer value.
+    /** Constructs a Token with a double value.
      *
-     * @param i the integer value of the new token
+     * @param x the double value of the new token
      */
-    public Token( int i ) {
-        isInteger = true;
-        value = new BigDecimal( i );
+    public Token( double x ) {
+        isDouble = true;
+        value = new Double( x );
     }
 
-
-
     /** Returns the name of this Token. Precondition: this Token should
-     * represent a String, not an integer.
+     * represent a String, not a double.
      *
      * @return the name of this Token.
      */
@@ -61,22 +55,22 @@ public class Token {
 
 
     /** Returns the value of this Token. Precondition: this Token should
-     * represent an integer, not a string.
+     * represent a double, not a string.
      *
      * @return the value of this Token.
      */
-    public BigDecimal getValue() {
+    public Double getValue() {
         return value;
     }
 
 
 
-    /** Checks whether this Token contains an integer.
+    /** Checks whether this Token contains a double.
      *
      * @return true if this token has a non-null value
      */
-    public boolean isInteger() {
-        return isInteger;
+    public boolean isDouble() {
+        return isDouble;
     }
 
 
@@ -86,7 +80,7 @@ public class Token {
      * @return true if this token has a non-null name
      */
     public boolean isVariable() {
-        return ! isInteger;
+        return ! isDouble;
     }
 
 
@@ -98,19 +92,19 @@ public class Token {
      * if not
      */
     public boolean equals(String s) {
-        return (! isInteger && name.equals(s));
+        return (! isDouble && name.equals(s));
     }
 
 
 
     /** Checks whether this Token's value equals <code>i</code>.
      *
-     * @param i the integer to compare to
+     * @param other the Double to compare to
      * @return true if this Token's value equals <code>i</code> and false
      * if not
      */
-    public boolean equals(Integer tok) {
-        return (isInteger && value.intValue() == tok.intValue());
+    public boolean equals(Double other) {
+        return (isDouble && value.doubleValue() == other.doubleValue());
     }
 
 
@@ -120,6 +114,6 @@ public class Token {
      * @return a string representing this Token
      */
     public String toString() {
-        return isInteger ? value.toString() : name;
+        return isDouble ? value.toString() : name;
     }
 }
