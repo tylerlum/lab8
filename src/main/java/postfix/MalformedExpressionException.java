@@ -1,3 +1,5 @@
+package postfix;
+
 /** Exception thrown when an invalid arithmetic expression is encountered
  * by the program. The message field contains information about the
  * particular problem that was encountered.

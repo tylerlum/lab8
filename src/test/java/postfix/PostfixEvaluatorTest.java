@@ -1,3 +1,5 @@
+package postfix;
+
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -9,8 +11,9 @@ public class PostfixEvaluatorTest {
 	// PostfixEvaluator implementation.
 	
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void test1() throws MalformedExpressionException {
+	    PostfixEvaluator pe = new PostfixEvaluator("5 2 +");
+	    pe.eval();
 	}
 
 }
