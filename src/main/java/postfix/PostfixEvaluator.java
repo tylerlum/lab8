@@ -1,5 +1,6 @@
 package postfix;
 
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.Stack;
 
 /**
@@ -36,29 +37,67 @@ public class PostfixEvaluator {
 	 * @throws MalformedExpressionException if the provided expression is not
 	 * 	a valid expression in Postfix notation
 	 */
-	double eval( ) throws MalformedExpressionException {
-		// TODO: Implement this method.
-		// The code provided here is for illustration only, and
-		// can be deleted when you write your implementation.
-
-		// Using a stack makes it very simple to evaluate the
-		// arithmetic expression.
-		// See http://docs.oracle.com/javase/8/docs/api/java/util/Stack.html
-		
-		// Use the Scanner to get the elements (tokens) in the
-		// arithmetic expression.
-		
+	public double eval( ) throws MalformedExpressionException {
+		// setup scanner and token
 		Scanner scanner = new Scanner(arithmeticExpr);
-		Token currToken = scanner.getToken();
-		
-		// now process the token, etc.
-		// You should read the implementation of the Token class
-		// to determine what methods you can and should use.
-		
-		// It is sufficient to support the four basic operations:
-		// addition, subtraction, multiplication & division.
-		
-		return 0.0;
+		Stack<Token> arithmeticExprStack = new Stack<>();
+
+		// keep adding tokens to stack
+		while (!scanner.isEmpty()) {
+			Token currentToken = scanner.getToken();
+			scanner.eatToken();
+
+			// if token is operator, then make calculation
+			if (isOperator(currentToken)) {
+				PostfixExpression postfixExpression = makePostfixExpression(arithmeticExprStack, currentToken);
+				Double newTotal = postfixExpression.eval();
+				// if no more tokens, return total
+				// otherwise, push to stack and continue
+				if (scanner.isEmpty()) {
+					return newTotal;
+				} else {
+					arithmeticExprStack.push(new Token(newTotal));
+				}
+			} else {
+				arithmeticExprStack.push(currentToken);
+			}
+		}
+		// only get here if incorrect input
+		throw new MalformedExpressionException();
 	}
-	
+
+	private Stack<Token> makeArithmeticExprStack(String arithmeticExpr) {
+		Scanner scanner = new Scanner(arithmeticExpr);
+		Stack<Token> arithmeticExprStack = new Stack<>();
+		while (!scanner.isEmpty()) {
+			arithmeticExprStack.push(scanner.getToken());
+			scanner.eatToken();
+		}
+		return arithmeticExprStack;
+	}
+
+	private PostfixExpression makePostfixExpression(Stack<Token> arithmeticExprStack, Token operator) throws MalformedExpressionException {
+		Token t1 = null;
+		Token t2 = null;
+		if (!arithmeticExprStack.empty()) {
+			t2 = arithmeticExprStack.pop();
+		}
+		if (!arithmeticExprStack.empty()) {
+			t1 = arithmeticExprStack.pop();
+		}
+		if (t1 == null) {
+			throw new MalformedExpressionException();
+		}
+		return new PostfixExpression(t1, t2, operator);
+	}
+
+	private boolean isOperator(Token token) {
+		if (token.isVariable()) {
+			String name = token.getName();
+			if (name.equals("+") || name.equals("-") || name.equals("*") || name.equals("/")) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
